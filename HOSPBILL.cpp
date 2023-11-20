@@ -1,348 +1,580 @@
 
 #include <iostream>
+#include <iomanip>
 using namespace std;
 
-// function header for not valid input for number of days 
-double inputValidate (double num)
+//Function prototypes
+void displayroomMenu(); //menu for room
+void displaySurgeryMenu(); //menu for surgery
+void displayMedicationMenu(); //menu for medication
+void displayServiceMenu(); //menu for service
+char checkValid(char); //validation for user input yes or no
+double roomCharges(int);
+double surgeryCharges(int);
+double pharmacyCharge(int);
+double serviceCharge(int);
+double hospitalstay(double, double);
+void displayBill (int, double, double, double, double, double); 
+string Maxname(string[], double[] , int );
+double Max (string[], double[], int);
+string Minname(string[], double[], int);
+double Min (string[] , double[] , int);
+double getBill(double, double, double, double);
+int totalDays(int[], int );
+double cacltotal(double[], int);
+
+int main()
 {
-
-	while (num < 0)
-	{
-		cout << "Please enter again. Number must be a positive number." << endl; //not valid for negative integer
-		cout << "Enter how many days spent in the hospital: ";
-		cin >> num; //input new number for days spent at hospital
-		cout << endl;
-	}
+	//variable declaration for character data types
+	char roomcheck,
+		 surgerycheck,
+		 pharmacycheck,
+		 medicationcheck,
+		 servicecheck;
 	
-	//return value function of new number of days to the main
-	return num;
-}
-
-// function header for hospital stay 
-double hospitalStay()
-{
-	//declare type of room
-	char roomtype;	
-	double daily_rate;
+	//variable declaration for double data types	 
+	double totalhospitalStay=0,
+		   totalsurgery=0,
+		   totalmedication=0,
+		   totalservice=0,
+		   minBill,
+		   maxBill,
+		   averageDays,
+		   TotalCharges;
 	
-	// constant menu for type of room
-	const char FIRST_CLASS = 'A',
-	           SECOND_CLASS = 'B',
-	           THIRD_CLASS = 'C';
+	//variable declaration for integer data types	   
+	int roomtypes,
+		surgerytypes,
+		medicationtypes,
+		servicetypes,
+		total_days,
+		totalpatient,
+		day;
 	
-	//display the menu of type of room
-	cout << "---------------------------------------------------------------\n";	           
-	cout<< "\t\t   These are the type of room " << endl
-		<< "\t\t_______________________________" <<endl
-		<< "\t\t|Code |Room Type     |Price   |" <<endl
-		<< "\t\t|-----|--------------|--------|" <<endl
-	    << "\t\t|A.   | FIRST CLASS  | RM 400 |" << endl
-	    << "\t\t|B.   | SECOND CLASS | RM 250 |"<< endl
-	    << "\t\t|C.   | THIRD CLASS  | RM 150 |" << endl
-	    << "\t\t|_____|______________|________|" <<endl<<endl
-	    << "Please enter your room type: " ;
-	cin >> roomtype; //input your choice of room type
-	cout << "---------------------------------------------------------------\n";
-	cout << "Please note that the room price has been already included with"<<endl
-		 << "                       food charges                           "<<endl;	
+	//variable declaration for string data types	
+	string Billmaxname, //name for highest bill
+		   Billminname; //name for lowest bill
 	
-	//to find the daily rate based on type of room
-	if (roomtype == 'A'|| roomtype == 'a') 
-	{
-		daily_rate = 400 ;
-		cout << "Daily rate for first class room is : RM " << daily_rate << endl; //display the price per day of room type
-	}
 	
-	if (roomtype == 'B' || roomtype == 'b')
-	{
-		daily_rate = 250;
-		cout << "Daily rate for second class room is : RM " << daily_rate << endl; //display the price per day of room type
-	}
-	
-	if (roomtype == 'C' || roomtype == 'c')
-	{
-		daily_rate = 150;
-		cout << "Daily rate for third class room is : RM " << daily_rate << endl; //display the price per day of room type
-	}
-	
-	//return value function of room type to the main
-	return daily_rate;
-}
-
-
-//function header for surgery charge
-double surgeryCharge()
-{
-	//declare type of surgery and rate surgery
-	char surgerytype;
-	double rateSurgery;
-	bool surgery;
-	
-	//constant menu for type of surgery
-	const char KIDNEY_TRANSPLANT = 'A',
-	           APPENDIX = 'B',
-	           CARDIAC = 'C',
-	           THYROID = 'D',
-	           LUNG_CANCER = 'E';
-	
-	cout << "\nDid the patient do surgery? : "<<endl;
-	cout << "Enter 1 for (YES) Or 0 for (NO) :";
-	cin >> surgery;
-	
-	//to find patient has done the surgery or not
-	if (surgery == 1){
-	//display the menu of type of surgery 
-	cout << "---------------------------------------------------------------\n";	        
-	cout << "\t\t        These are type of surgery " << endl
-		 << "\t\t____________________________________________" << endl
-		 << "\t\t|Code |Type of Surgery           |Price    |" << endl
-		 << "\t\t|---- |--------------------------|---------|" << endl
-	     << "\t\t|A.   |KIDNEY TRANSPLANT SURGERY |RM  40000|" << endl
-	     << "\t\t|B.   |APPENDIX REMOVAL SURGERY  |RM   5000|" << endl
-	     << "\t\t|C.   |HEART BYPASS SURGERY      |RM  75000|" << endl
-	     << "\t\t|D.   |THYROID SURGERY           |RM  20000|" << endl
-	     << "\t\t|E.   |LUNG CANCER SURGERY       |RM 200000|" << endl
-	     << "\t\t|_____|__________________________|_________|" << endl<<endl
-	     << "Please enter your type of surgery: ";
-	cin >> surgerytype; //input your choice of surgery type
-	cout << "---------------------------------------------------------------\n";	
-
-	//to find payment based on type of surgery
-	if (surgerytype == 'A' || surgerytype == 'a')
-	{
-		rateSurgery = 40000;
-		cout << "The total cost for the Kidney Transplant Surgery is: RM " << rateSurgery << endl; //display the price of surgery type
-	}
-	
-	if (surgerytype == 'B'|| surgerytype == 'b')
-	{
-		rateSurgery = 5000;
-		cout << "The total cost for the Appendix Removal Surgery is: RM " << rateSurgery << endl;//display the price of surgery type
-	}
-	
-	if (surgerytype == 'C' || surgerytype == 'c')
-	{
-		rateSurgery = 75000;
-		cout << "The total cost for the Heart bypass Surgery is: RM " << rateSurgery << endl;//display the price of surgery type
-	}
-	
-	if (surgerytype == 'D' || surgerytype == 'd')
-	{
-		rateSurgery = 20000;
-		cout << "The total cost for the Thyroid Surgery is: RM " << rateSurgery << endl;//display the price of surgery type
-	}
-	
-	if (surgerytype == 'E'|| surgerytype == 'e')
-	{
-		rateSurgery = 200000;
-		cout << "The total cost for the Lung Cancer Surgery is: RM " << rateSurgery << endl;//display the price of surgery type
-	}
-	}
-	else
-	{
-		rateSurgery = 0; //because no surgery 
-	}
-	//return value function of surgery type to the main
-	return rateSurgery;
-}
-
-//function header for pharmacy charge
-double pharmacyCharge()
-{
-	//declare type of medication and rate pharmacy
-	char medicationtype;
-	double ratePharmacy;
-	bool med;
-	
-	//constant menu for type of medication
-	const char AZATHIOPRINE = 'A', // medicine for kidney problem
-	           CEFOTAXIME = 'B' ,  // Medicine for appendix surgery
-	           ANTIPLATELET = 'C', // Medicine after heart bypass surgery
-	           LEVOTHYROXINE = 'D', // medicine after thyroid removal 
-	           ABRAXANE = 'E'; // medicine for lung cancer
-	
-	cout << "\nDid the patient took medicine ? :"<<endl;
-	cout << "Enter 1 for (YES) OR 0 for (NO) : ";
-	cin >> med;
-	
-	//to find patient take medicine at pharmacy or not
-	if (med == 1){
-	//display the menu of type of medication 
-	cout << "---------------------------------------------------------------\n";	           
-	cout << "\t\t   These are the type of medication" << endl
-		 << "\t\t______________________________________"<<endl
-		 << "\t\t|Code |Type of medicine |Price       |" <<endl
-		 << "\t\t|-----|-----------------|------------|" <<endl
-	     << "\t\t|A.   |AZATHIOPRINE     |RM 250      |" << endl
-	     << "\t\t|B.   |CEFOTAXIME       |RM 145      |" << endl
-	     << "\t\t|C.   |ANTIPLATELET     |RM 650      |" << endl
-	     << "\t\t|D.   |LEVOTHYROXINE    |RM 220      |" << endl
-	     << "\t\t|E.   |ABRAXANE         |RM 950      |" << endl
-	     << "\t\t|_____|_________________|____________|" <<endl<<endl
-	     << "Please enter your choice: ";
-	cin >> medicationtype; //input your choice of medication type
-	cout << "---------------------------------------------------------------\n";	
-	
-	//to find payment based on type of medication
-	if (medicationtype == 'A'|| medicationtype == 'a')
-	{
-		ratePharmacy = 250 ;
-		cout << "The pharmacy charge is: RM " << ratePharmacy << endl; //display the price of medication type
-	}
-	
-	if (medicationtype == 'B'|| medicationtype == 'b')
-	{
-		ratePharmacy = 145 ;
-		cout << "The pharmacy charge is: RM " << ratePharmacy << endl; //display the price of medication type
-	}
-	
-	if (medicationtype == 'C'|| medicationtype == 'c')
-	{
-		ratePharmacy = 650;
-		cout << "The pharmacy charge is: RM " << ratePharmacy << endl; //display the price of medication type 
-	}
-	
-	if (medicationtype == 'D'|| medicationtype == 'd')
-	{
-		ratePharmacy = 220 ;
-		cout << "The pharmacy charge is: RM " << ratePharmacy << endl; //display the price of medication type
-	}
-	
-	if (medicationtype == 'E'|| medicationtype == 'e')
-	{
-		ratePharmacy = 950 ;
-		cout << "The pharmacy charge is: RM " << ratePharmacy << endl; //display the price of medication type
-	}
-	}
-	else
-	{
-		ratePharmacy = 0; //because no medicine
-	}
-	
-	//return value function of medication type to the main
-	return ratePharmacy;         
-}
-
-//function header for service charge
-double serviceCharge( )
-{
-	//declare type of service frequency and rate service of patient get the service
-	char servicetype;
-	double frequency;
-	double rateService;
-	bool srvc;
-	
-	//constant menu for type of service
-	const char XRAY = 'A',
-	           LABORATARY_TEST = 'B',
-	           CHEMOTHERAPHY = 'C',
-	           PHISIOTHERAPHY = 'D';
-	
-	cout << "\nDid the patient take Service? :"<<endl
-		 << "Enter 1 for (YES) OR 0 for (NO): ";
-	cin >> srvc;
-	
-	//to find patient has done the service or not
-	if (srvc == 1){   
-	//display the menu of type of service
-	cout << "---------------------------------------------------------------\n";	  	           
-	cout << "\t\t     Please enter the service" << endl
-		 << "\t\t______________________________________"<<endl
-		 << "\t\t|Code |Type of Service    |Price     |"<<endl
-		 << "\t\t|-----|-------------------|----------|"<<endl
-	     << "\t\t|A.   |X-RAY              |RM  100   |" << endl
-		 << "\t\t|B.   |LABORATORY TEST    |RM   30   |" << endl 
-		 << "\t\t|C.   |CHEMOTHERAPHY      |RM 9200   |" << endl
-		 << "\t\t|D.   |PHYSIOTHERAPHY     |RM   50   |" << endl
-		 << "\t\t|_____|___________________|__________|" <<endl<<endl
-		 << "Please enter your choice: " ;
-	cin >> servicetype;
-	cout << "---------------------------------------------------------------\n";
-	
-	//to find payment based on type of service	
-	if (servicetype == 'A' || servicetype == 'a')
-	{
-	   cout << "How many time you done this service:";
-	   cin >> frequency; //input frequency that you have done for the service
-	   rateService = 100 * frequency; //to find the total payment for the type of service
-	   cout << "The rate service is: RM " << rateService << endl; //display the price of service type
-	}
-	
-	if (servicetype == 'B' || servicetype == 'b')
-	{
-	   cout << "How many time you done this service:";
-	   cin >> frequency; //input frequency that you have done for the service
-	   rateService = 30 * frequency; //to find the total payment for the type of service
-	   cout << "The rate service is: RM " << rateService << endl;  //display the price of service type
-	}
-	
-	if (servicetype == 'C' || servicetype == 'c')
-	{
-	   cout << "How many time you done this service:";
-	   cin >> frequency; //input frequency that you have done for the service
-	   rateService = 9200 * frequency; //to find the total payment for the type of service
-	   cout << "The rate service is: RM " << rateService << endl;  //display the price of service type
-	}
-	
-	if (servicetype == 'D' || servicetype == 'd')
-	{
-	   cout << "How many time you done this service:";
-	   cin >> frequency; //input frequency that you have done for the service
-	   rateService = 50 * frequency; //to find the total payment for the type of service
-	   cout << "The rate service is: RM " << rateService << endl;  //display the price of service type
-	}
-	}
-	else
-	{
-		rateService = 0; //because no service
-	}
-	//return value function of service type to the main	
-	return rateService;      	           
-}
-
-//function header for calculate the total bill
-double getBill (double days, double daily_rate, double rateSurgery, double ratePharmacy, double rateService)                     	                    
-{
-	//calculate the total bill
-	double totalBill = (days * daily_rate) + rateSurgery + ratePharmacy + rateService ;
-	
-	//return value function of getBill to the main
-	return totalBill;
-}
-
-// function header for display total bill
-void displayBill  (double totalBill)
-{
-	cout << "_______________________________________________________________\n";
-	cout << "\t\t\t\t\tTotal payment: RM" << totalBill <<endl;
-	cout << "_______________________________________________________________\n";	    
-}
-
-
-
-
-int main ()
-{
-	double days; // declare variable days
+	//display the bill	   
 	cout << "_______________________________________________________________\n";
 	cout << "\t\t  HOSPITAL BILLING SYSTEM"  << endl;
 	cout << "_______________________________________________________________\n";
 	cout << "" << endl;
-	
-	// to get the number of days patient stay in the hospital    
-	cout << "How many days spent in the hospital: " ;
-	cin >> days;
+	cout << "Total Patient check out today: "; //user input amount of patient on that day
+	cin >> totalpatient;
 	cout << endl;
+		
+	//array declaration
+	string patientName[totalpatient];
+	int days[totalpatient] = {0};
+	double  stay_charges[totalpatient] = {0},
+			daily_rates[totalpatient] = {0},
+			rateSurgery[totalpatient] = {0},
+			ratePharmacy[totalpatient] = {0},
+			rateService[totalpatient] = {0},
+			totalCost[totalpatient] = {0};
 	
-	inputValidate(days); // function call for input Validation
-	double total_rate = hospitalStay(); // function call for cost of daily rate 
-	double surgery = surgeryCharge(); // function call for surgery charge
-	double pharmacy = pharmacyCharge(); // function call for pharmacy charge
-	double service = serviceCharge(); // function call for service charge
-	double totalBill = getBill (days, total_rate, surgery, pharmacy, service); // function call for calculate the hospital bill
-	displayBill (totalBill); // function call for display the hospital bill
+		
+	for (int i=0; i<totalpatient; i++)
+	{
+		cin.ignore();
+		cout << "_______________________________________________________________\n\n";
+		cout<<"What is name for Patient " << i +1<<": ";
+		getline(cin,patientName[i]);
+		cout<<endl;
+		cout<< "\nDid the patient stay at room?"<<endl;
+		cout<< "Enter Y for YES and N for No : ";
+		cin>>roomcheck;
+		cout<<endl;
+		roomcheck = checkValid(roomcheck);
+		
+		cout<<"How many days spent in the hospital? ";
+		cin>>days[i];
+		cout<<endl;
+		
+		//check validation for room
+		if(roomcheck == 'y' || roomcheck == 'Y')
+		{
+			displayroomMenu();
+		}
+		
+		if(roomcheck != 'N' && roomcheck !='n')
+		{
+		cout << "Which type of room that the patient stay? ";
+		cin>> roomtypes;
+		cout<<endl;		
+		daily_rates[i] += roomCharges(roomtypes);
+		}
+		
+		//to calculate stay charge
+		stay_charges[i] = hospitalstay(daily_rates[i], days[i]);
+		cout<<endl<<endl;
+		
+		cout<< "Did the patient took any surgery? "<<endl; 
+		cout<< "Enter Y for YES and N for No : ";
+		cin>>surgerycheck;
+		cout<<endl;
+		surgerycheck = checkValid(surgerycheck);
+		
+		//check validation for surgery
+		if(surgerycheck == 'y' || surgerycheck == 'Y')
+		{
+			displaySurgeryMenu();
+		}
+		
+		while(surgerycheck != 'N' && surgerycheck !='n')
+		{
+		cout<< "Which type of surgery that the patient take? ";
+		cin>> surgerytypes;
+		cout<<endl;
+	
+		rateSurgery[i] += surgeryCharges(surgerytypes);
+		
+		cout<< "Has Patient take any other surgery? "<<endl;
+		cout<< "Enter Y for YES and N for No : ";
+		cin >> surgerycheck;
+		cout<<endl;
+		}
+	
+		cout<<endl<<endl;
+		
+		cout<< "Did the patient take any medicine?"<<endl;
+		cout<< "Enter Y for YES and N for No : ";
+		cin>> medicationcheck;
+		cout<<endl;
+		medicationcheck = checkValid(medicationcheck);
+		
+		//check validation for medicine
+		if(medicationcheck == 'Y' || medicationcheck == 'y')
+		{
+			displayMedicationMenu();
+		}
+	
+		while(medicationcheck != 'N' && medicationcheck != 'n' )
+		{
+			cout<< "Which type of medicine that the patient take? ";
+			cin>> medicationtypes;
+			cout<<endl;
+		
+			ratePharmacy[i] += pharmacyCharge(medicationtypes);
+			cout<< "Has Patient take any other medicine? "<<endl;
+			cout<< "Enter Y for YES and N for No : ";
+			cin>> medicationcheck;
+		}
+	
+		cout<<endl<<endl;
+			
+		cout<< "Did the patient take any service?"<<endl;
+		cout<< "Enter Y for YES and N for No : ";
+		cin>> servicecheck;
+		cout<<endl;
+		servicecheck = checkValid(servicecheck);
+	
+		//check validation for service
+		if(servicecheck == 'Y' || servicecheck =='y')
+		{
+			displayServiceMenu();
+		}
+	
+		while(servicecheck != 'N' && servicecheck !='n' )
+		{
+			cout<< "Which type of service that the patient take? ";
+			cin>> servicetypes;
+			cout<<endl;
+		
+			rateService[i] += serviceCharge(servicetypes);
+			cout<< "Has Patient take any other service? "<<endl;
+			cout<< "Enter Y for YES and N for No : ";
+			cin>> servicecheck;
+			cout<<endl;
+			servicecheck = checkValid(servicecheck);
+		}
+	}
+	
+	for(int i=0; i<totalpatient;i++)
+	{
+	 	cout << "_______________________________________________________________" <<endl;
+	 	cout << "\t\t  Patient " << i+1 << " " << patientName[i] << " bill " <<endl;
+	 	cout << "---------------------------------------------------------------\n";
+	 	
+	 	//function call to find total bill and display bill
+	 	totalCost[i] = getBill(stay_charges[i], rateSurgery[i], ratePharmacy[i], rateService[i]);
+	 	displayBill(days[i], totalCost[i], stay_charges[i], rateSurgery[i], ratePharmacy[i], rateService[i]);
+	}
+	 	cout << endl;
+	 	
+	 	//function call to get total bill for each category
+	 	total_days       =totalDays(days,totalpatient);
+	 	totalhospitalStay=cacltotal(stay_charges,totalpatient);
+	 	totalsurgery     =cacltotal(rateSurgery,totalpatient);
+	 	totalmedication  =cacltotal(ratePharmacy,totalpatient);
+	 	totalservice     =cacltotal(rateService,totalpatient);
+	 	TotalCharges     =cacltotal(totalCost, totalpatient);
+	 	
+	 	//to find average of hospital stay
+	 	double averageHospitalStay = static_cast<double>(total_days) / totalpatient;
+	 	
+	 	//function call to find patient
+	 	//name for highest and lowest bill
+	 	Billmaxname = Maxname(patientName, totalCost, totalpatient);
+	 	maxBill =Max(patientName, totalCost, totalpatient);
+	 	Billminname= Minname(patientName, totalCost, totalpatient);
+	 	minBill = Min(patientName, totalCost, totalpatient);
+	 	
+	 	//to display total bill for each category 
+	 	cout << fixed << showpoint << setprecision(2);
+	 	cout << "Total Charges for all patients   : RM" <<TotalCharges<<endl;
+	 	cout << "Total Hospital Stay              : RM" <<totalhospitalStay<<endl;
+	 	cout << "Total Surgery                    : RM"<<totalsurgery<<endl;
+	 	cout << "Total Medication                 : RM" <<totalmedication<<endl;
+	 	cout << "Total Service                    : RM" <<totalservice<<endl;
+	 	cout << "Average Hospital Stay            : "<<averageHospitalStay<<" days "<<endl<<endl;
+	 	
+	 	if (totalpatient>1)
+		 {
+		 	//to display patient with highest and lowest bill
+		 	cout << "---------------------------------------------------------------\n";
+	 		cout <<"The patient's name that pays the highest bill: "<< Billmaxname << " RM " <<maxBill<<endl<<endl;
+	 		cout <<"The patient's name that pays the lowest  bill: "<< Billminname << " RM " <<minBill<<endl<<endl;
+	 		cout << "---------------------------------------------------------------\n";
+		 }
+}
+	 	
+//function header for room menu		 	
+void displayroomMenu()
+{
+	cout<< "---------------------------------------------------------------\n";	           
+	cout<< "\t\t  These are the type of room: " << endl
+		<< "\t\t_______________________________" <<endl
+		<< "\t\t|Code |Room Type     |Price   |" <<endl
+		<< "\t\t|-----|--------------|--------|" <<endl
+	    << "\t\t|1.   | FIRST CLASS  | RM 400 |" << endl
+	    << "\t\t|2.   | SECOND CLASS | RM 250 |"<< endl
+	    << "\t\t|3.   | THIRD CLASS  | RM 150 |" << endl
+	    << "\t\t|_____|______________|________|" <<endl<<endl;	
+}
 
-	return 0;
+//function header for surgery menu
+void displaySurgeryMenu()
+{
+	cout << "---------------------------------------------------------------\n";	        
+	cout << "\t\t        These are type of surgery: " << endl
+		 << "\t\t____________________________________________" << endl
+		 << "\t\t|Code |Type of Surgery           |Price    |" << endl
+		 << "\t\t|---- |--------------------------|---------|" << endl
+	     << "\t\t|1.   |KIDNEY TRANSPLANT SURGERY |RM  40000|" << endl
+	     << "\t\t|2.   |APPENDIX REMOVAL SURGERY  |RM   5000|" << endl
+	     << "\t\t|3.   |HEART BYPASS SURGERY      |RM  75000|" << endl
+	     << "\t\t|4.   |THYROID SURGERY           |RM  20000|" << endl
+	     << "\t\t|5.   |LUNG CANCER SURGERY       |RM 200000|" << endl
+	     << "\t\t|_____|__________________________|_________|" << endl<<endl;
+}
+
+//function header for medication menu
+void displayMedicationMenu()
+{
+	cout << "---------------------------------------------------------------\n";
+	cout << "\t\t   These are the type of medication:" << endl
+		 << "\t\t______________________________________"<<endl
+		 << "\t\t|Code |Type of medicine |Price       |" <<endl
+		 << "\t\t|-----|-----------------|------------|" <<endl
+	     << "\t\t|1.   |AZATHIOPRINE     |RM 250      |" << endl
+	     << "\t\t|2.   |CEFOTAXIME       |RM 145      |" << endl
+	     << "\t\t|3.   |ANTIPLATELET     |RM 650      |" << endl
+	     << "\t\t|4.   |LEVOTHYROXINE    |RM 220      |" << endl
+	     << "\t\t|5.   |ABRAXANE         |RM 950      |" << endl
+	     << "\t\t|_____|_________________|____________|" <<endl<<endl;
+}
+
+//function header for service menu
+void displayServiceMenu()
+{
+	cout << "---------------------------------------------------------------\n";	  	           
+	cout << "\t\t      Please enter the service:" << endl
+		 << "\t\t______________________________________"<<endl
+		 << "\t\t|Code |Type of Service    |Price     |"<<endl
+		 << "\t\t|-----|-------------------|----------|"<<endl
+	     << "\t\t|1.   |X-RAY              |RM  100   |" << endl
+		 << "\t\t|2.   |LABORATORY TEST    |RM   30   |" << endl 
+		 << "\t\t|3.   |CHEMOTHERAPHY      |RM 9200   |" << endl
+		 << "\t\t|4.   |PHYSIOTHERAPHY     |RM   50   |" << endl
+		 << "\t\t|_____|___________________|__________|" <<endl<<endl;
+}
+
+//to check validation for service
+char checkValid(char check)
+{
+	while (check != 'Y' && check != 'N' && check!= 'y' && check != 'n')
+	{
+		cout << "Error. Enter Y or N only . Enter again :";
+		cin>>check;
+	}
+	return check;
+}
+
+//function header for types of room
+double roomCharges(int roomtypes)
+{
+	double daily_rates;
+	
+	//to find the daily rate based on type of room
+	if (roomtypes == 1) 
+	{
+		daily_rates += 400;
+		
+	}
+	
+	else if (roomtypes == 2)
+	{
+		daily_rates += 250;
+	}
+	
+	
+	else if (roomtypes == 3)
+	{
+		daily_rates += 150;
+	}
+	
+	//return value function of room type to the main
+	return daily_rates;
+}
+
+//function header for hospital stay
+double hospitalstay (double room_charges, double day)
+{
+	return room_charges * day;
+}
+
+//function header for surgery charge
+double surgeryCharges (int surgerytypes)
+{
+	double rateSurgery;
+	
+	//to find payment based on type of surgery
+	if (surgerytypes = 1)
+	{
+		rateSurgery += 40000;
+	}
+	
+	if (surgerytypes == 2)
+	{
+		rateSurgery += 5000;
+	}
+	
+	if (surgerytypes == 3)
+	{
+		rateSurgery += 75000;
+	}
+	
+	if (surgerytypes == 4)
+	{
+		rateSurgery += 20000;
+	}
+	
+	if (surgerytypes == 5)
+	{
+		rateSurgery += 200000;
+	}
+	
+	//return value function of surgery rate to the main
+	return rateSurgery;
+}
+
+//function header for pharmacy charge
+double pharmacyCharge(int medicationtypes)
+{
+	//declare rate pharmacy
+	double ratePharmacy;
+	
+	if (medicationtypes == 1)
+	{
+		ratePharmacy += 250 ;
+	}
+	if (medicationtypes == 2)
+	{
+		ratePharmacy += 145 ;
+	}
+	if (medicationtypes == 3)
+	{
+		ratePharmacy += 650;
+	}
+	if (medicationtypes == 4)
+	{
+		ratePharmacy += 220 ;
+	}
+	if (medicationtypes == 5)
+	{
+		ratePharmacy += 950 ;
+	}
+		
+	//return value function of pharmacy rate to the main
+	return ratePharmacy;         
+}
+
+//function header for service charge
+double serviceCharge(int servicetypes)
+{
+	//declare type of service frequency and rate service of patient get the service
+	int frequency;
+	double rateService;
+	
+	//to find payment based on type of service	
+	if (servicetypes == 1)
+	{
+	   cout << "How many time you done this service:";
+	   cin >> frequency; //input frequency that you have done for the service
+	   rateService += 100 * frequency; //to find the total payment for the type of service
+	}
+	if (servicetypes == 2)
+	{
+	   cout << "How many time you done this service:";
+	   cin >> frequency; //input frequency that you have done for the service
+	   rateService += 30 * frequency; //to find the total payment for the type of service  
+	}
+	if (servicetypes == 3)
+	{
+	   cout << "How many time you done this service:";
+	   cin >> frequency; //input frequency that you have done for the service
+	   rateService += 9200 * frequency; //to find the total payment for the type of service
+	}
+	if (servicetypes == 4)
+	{
+	   cout << "How many time you done this service:";
+	   cin >> frequency; //input frequency that you have done for the service
+	   rateService = 50 * frequency; //to find the total payment for the type of service
+	}
+	
+	//return value function of service rate to the main	
+	return rateService;      	           
+}
+
+//function header for highest name
+string Maxname(string array1[], double array2[], int ARRAY_SIZE)
+{
+	double max = array2[0];
+	string max_name = array1[0];
+	
+	for (int i = 1; i <ARRAY_SIZE ; i++)
+	{
+		if (array2[i]> max)
+		{
+			max = array2[i];
+			max_name = array1[i];
+		}
+		else if (array2[i] == max)
+		{
+			max = array2[i];
+			max_name += ",";
+			max_name += array1[i];
+		}
+	}
+	//return name of the highest bill
+	return max_name;
+}
+
+//function header for highest bill
+double Max(string array1[], double array2[], int ARRAY_SIZE)
+{
+	double max = array2[0];
+	
+	for (int i = 1; i<ARRAY_SIZE; i++)
+	{
+		if (array2[i]>max)
+		{
+			max = array2[i];
+		}
+	}
+	
+	//return value of the highest bill
+	return max;
+}
+
+//function header for lowest name
+string Minname(string array1[], double array2[], int ARRAY_SIZE)
+{
+	double min = array2[0];
+	string min_name = array1[0];
+	
+	for (int i = 1; i <ARRAY_SIZE ; i++)
+	{
+		if (array2[i] < min )
+		{
+			min = array2[i];
+			min_name = array1[i];
+		}
+		else if (array2[i] == min)
+		{
+			min = array2[i];
+			min_name += ",";
+			min_name += array1[i];
+		}
+	}
+	
+	//return name of the lowest bill
+	return min_name;
+}
+
+//function header for lowest bill
+double Min(string array1[], double array2[], int ARRAY_SIZE)
+{
+	double min = array2[0];
+	
+	for (int i = 1; i<ARRAY_SIZE; i++)
+	{
+		if (array2[i]<min)
+		{
+			min = array2[i];
+		}
+	}
+	
+	//return value of the lowest bill
+	return min;
+}
+
+//function header for get bill
+double getBill(double stay_charges, double rateSurgery, double ratePharmacy, double rateService)
+{
+	double total_cost;
+	
+	total_cost = stay_charges + rateSurgery + ratePharmacy + rateService;
+	
+	//return total value of bill
+	return total_cost;
+}
+
+//function header for display bill
+void displayBill (int days, double totalCost, double stay_charges, double rateSurgery, double ratePharmacy, double rateService)                     	                    
+{
+	cout << "Days Spend in the Hospital    : " << days << endl;
+	cout << "Hospital Stay Charges         : " << stay_charges << endl;
+	cout << "Surgery Charges               : " << rateSurgery << endl;
+	cout << "Pharmacy Charges              : " << ratePharmacy << endl;
+	cout << "Service Charges               : " << rateService << endl;
+	cout << "_______________________________________________________________" << endl;
+	cout << "Total Charges                 :\t" << totalCost <<endl;
+	cout << "_______________________________________________________________" << endl;
 	
 }
 
+//function header for total days
+int totalDays(int array[], int ARRAY_SIZE)
+{
+	int total =0;
+	for (int i= 0; i <ARRAY_SIZE; i++)
+	{
+		total += array[i];
+	}
+	return total;
+}
+
+//function header to calculate total
+double cacltotal(double array[], int ARRAY_SIZE)
+{
+	double total=0;
+	for (int i= 0; i<ARRAY_SIZE; i++)
+	{
+		total += array[i];
+	}
+	return total;
+}
