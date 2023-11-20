@@ -1,15 +1,6 @@
-/*
-This program has develop for hospital billing system for patients.
-
-				Developer 1: Luqman Azri
-				Developer 2: Nur Fatihah
-				Developer 3: Fatin Shahirah
-*/
-
 
 #include <iostream>
 using namespace std;
-
 
 // function header for not valid input for number of days 
 double inputValidate (double num)
